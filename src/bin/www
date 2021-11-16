@@ -4,14 +4,23 @@ require('dotenv').config();
  * Module dependencies.
  */
 
-const { setupMiddleware, setupDatabase } = require('../index.ts');
+const { init } = require('../app');
+const { startDB } = require('../db');
 const http = require('http');
 const express = require('express');
-
 const app = express()
 
-setupMiddleware(app);
-setupDatabase();
+/**
+ * Setup and initialize middlewares
+ */
+
+init(app);
+
+/**
+ * Start the DB connection pool
+ */
+
+startDB();
 
 /**
  * Get port from environment and store in Express.
