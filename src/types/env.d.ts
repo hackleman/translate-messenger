@@ -1,3 +1,5 @@
+import { Secret } from "jsonwebtoken";
+
 declare namespace NodeJS {
     export interface ProcessEnv {
       DB_HOST: string;
@@ -5,7 +7,7 @@ declare namespace NodeJS {
       DB_USERNAME: string;
       DB_PASSWORD: string;
       DB_DATABASE: string;
-      JWT_SECRET: string;
+      JWT_SECRET: Secret;
     }
   }
   
