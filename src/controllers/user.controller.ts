@@ -8,9 +8,13 @@ export const getUsers = (): Promise<User[]> => {
     return users;
 }
 
-export const getUser = (id: number): Promise<User | undefined> => {
+export const getUser = (username: string): Promise<User | undefined> => {
     const userRepo = getRepository(User);
 
-    const user = userRepo.findOne(id);
+    const user = userRepo.findOne({
+        where: {
+            username: username
+        }
+    });
     return user;
 }

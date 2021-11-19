@@ -4,9 +4,9 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/bin/www",
-    "build": "tsc",
-    "start": "node dist/src/index.js"
+    "start": "ts-node-dev --respawn src/bin/www",
+    "clean": "cross-env NODE_ENV='test' npm start",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

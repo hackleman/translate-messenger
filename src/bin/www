@@ -3,13 +3,13 @@ require('dotenv').config();
 /**
  * Module dependencies.
  */
-
-const { init } = require('../app');
-const { startDatabase, seedDatabase } = require('../db');
 const http = require('http');
 const express = require('express');
-const app = express()
+const { init } = require('../app');
+const { startDatabase, seedDatabase, resetDatabase } = require('../db');
 const { User, Conversation, Message } = require('../db/entity');
+
+const app = express()
 /**
  * Setup and initialize middlewares
  */
@@ -21,7 +21,12 @@ init(app);
  */
 startDatabase()
   .then(async (conn) => {
-    await seedDatabase();
+    console.log(process.env.NODE_ENV)
+    if (process.env.NODE_ENV == 'test') {
+      await resetDatabase();
+      await seedDatabase();
+    };
+
     console.log(await conn.getRepository(User).count());
     console.log(await conn.getRepository(Message).count());
     console.log(await conn.getRepository(Conversation).count());
