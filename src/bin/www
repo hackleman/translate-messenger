@@ -5,11 +5,11 @@ require('dotenv').config();
  */
 
 const { init } = require('../app');
-const { startDB } = require('../db');
+const { startDatabase, seedDatabase } = require('../db');
 const http = require('http');
 const express = require('express');
 const app = express()
-
+const { User, Conversation, Message } = require('../db/entity');
 /**
  * Setup and initialize middlewares
  */
@@ -19,8 +19,13 @@ init(app);
 /**
  * Start the DB connection pool
  */
-
-startDB();
+startDatabase()
+  .then(async (conn) => {
+    await seedDatabase();
+    console.log(await conn.getRepository(User).count());
+    console.log(await conn.getRepository(Message).count());
+    console.log(await conn.getRepository(Conversation).count());
+  });
 
 /**
  * Get port from environment and store in Express.

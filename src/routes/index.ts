@@ -1,9 +1,11 @@
 import userRouter from './user.routes';
-import postRouter from './post.routes';
 import authRouter from './auth.routes';
+import convoRouter from './conversation.routes';
+import messageRouter from './message.routes';
 
 export {
     userRouter,
-    postRouter,
     authRouter,
+    convoRouter,
+    messageRouter
 }

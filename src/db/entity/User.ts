@@ -1,9 +1,9 @@
-import {Entity, PrimaryGeneratedColumn, Column, BeforeUpdate, BeforeInsert, AfterLoad } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BeforeUpdate, BeforeInsert, AfterLoad, ManyToMany, JoinTable } from "typeorm";
+import Conversation from "./Conversation";
 import crypto from 'crypto';
 
 @Entity()
-export class User {
-
+export default class User {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -19,11 +19,15 @@ export class User {
     @Column()
     email: string;
 
-    private tempPassword: string;
+    @ManyToMany(() => Conversation,  { onDelete: 'CASCADE' })
+    @JoinTable()
+    conversations: Conversation[]
 
+    private tempPassword: string;
+    
     static createSalt: () => string;
     static encryptPassword: (plainPassword: any, salt: any) => string;
-    checkPassword: (password: any) => Boolean;
+    public checkPassword: (password: any) => Boolean;
 
     @AfterLoad()
     private loadTempPassword(): void {

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { getRepository } from 'typeorm';
-import { User } from '../db/entity/User';
+import { User } from '../db/entity';
 import jwt, { Secret } from 'jsonwebtoken';
 import { AuthResult } from '../types/auth';
 
@@ -59,7 +59,7 @@ export const loginUser = async (body: any): Promise<AuthResult> => {
     }
 }
 
-export const registerUser = async (body: any): Promise<AuthResult> => {
+export const registerUser = async (body: any): Promise<AuthResult> => { 
     const UserRepo = getRepository(User);
 
     const { username, password, email } = body;

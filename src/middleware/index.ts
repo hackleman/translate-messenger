@@ -1,5 +1,8 @@
-export { authGuard } from './guards';
+export { 
+    authGuard,
+    checkUser } from './guards';
 export {
     validateLogin,
-    validateRegister
+    validateRegister,
+    validateMessage
 } from './validation';

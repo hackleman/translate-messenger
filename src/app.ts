@@ -3,7 +3,7 @@ import { join } from 'path';
 import logger from 'morgan';
 import cors from 'cors';
 import "reflect-metadata";
-import { userRouter, postRouter, authRouter } from './routes';
+import { userRouter, authRouter, convoRouter, messageRouter } from './routes';
 import { authGuard } from './middleware';
 
 export const init = (app: Express): void => {
@@ -17,6 +17,7 @@ export const init = (app: Express): void => {
 
     app.use(authGuard);
 
+    app.use('/api/conversations', convoRouter)
     app.use('/api/users', userRouter);
-    app.use('/api/posts', postRouter);
+    app.use('/api/messages', messageRouter);
 }
