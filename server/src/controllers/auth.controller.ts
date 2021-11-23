@@ -2,7 +2,8 @@ import { Request } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../db/entity';
 import jwt, { Secret } from 'jsonwebtoken';
-import { AuthResult } from '../types/auth';
+import { AuthResult, UserResult } from '../types/auth';
+
 
 export const checkToken = async (req: Request): Promise<User | null> => {
     try {
@@ -21,77 +22,106 @@ export const checkToken = async (req: Request): Promise<User | null> => {
 }
 
 export const loginUser = async (body: any): Promise<AuthResult> => {
-    const UserRepo = getRepository(User);
+    try {
+        const UserRepo = getRepository(User);
 
-    const { username, password } = body;
-    const user = await UserRepo.findOne({
-        where: {
-            username
-        }
-    })
-
-    if (!user) {
-        return {
-            status: 401,
-            token: undefined,
-            msg: "Invalid user"
-        }
-    } 
+        const { username, password } = body;
+        const user = await UserRepo.findOne({
+            where: {
+                username
+            }
+        })
     
-    if (!user.checkPassword(password)) {
-        return {
-            status: 401,
-            token: undefined,
-            msg: "Invalid credentials"
-        }
-    }
+        if (!user) {
+            return {
+                status: 401,
+                token: '',
+                msg: "User not found",
+                user: null
+            }
+        } 
 
-    const token = jwt.sign(
-        {id: user?.id}, 
-        process.env.JWT_SECRET as Secret, 
-        {expiresIn: 86400}
-    );
-    
-    return {
-        status: 200,
-        msg: 'success',
-        token
+        if (!user.checkPassword(password)) {
+            return {
+                status: 401,
+                token: '',
+                msg: "Invalid credentials",
+                user: null
+            }
+        }
+        const token = jwt.sign(
+            {id: user?.id}, 
+            process.env.JWT_SECRET as Secret, 
+            {expiresIn: 86400}
+        );
+        
+        return {
+            status: 200,
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                username: user.username
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+        return {
+            status: 500,
+            token: '',
+            user: null
+        } 
     }
 }
 
 export const registerUser = async (body: any): Promise<AuthResult> => { 
-    const UserRepo = getRepository(User);
+    try {
+        const UserRepo = getRepository(User);
+        const { username, password, email } = body;
 
-    const { username, password, email } = body;
-    const user = UserRepo.create({
-        username,
-        password,
-        email
-    });
-
-    const userExists = await UserRepo.findOne({
-        where: {username: user.username}
-    });
-
-    if (userExists) {
-        return {
-            status: 401,
-            msg: 'User already exists',
-            token: undefined
-        }
-    }
-
-    const result = await UserRepo.save(user);
-
-    const token = jwt.sign(
-        {id: result.id}, 
-        process.env.JWT_SECRET as Secret, 
-        {expiresIn: 86400});
+        const userExists = await UserRepo.findOne({
+            where: {username}
+        });
     
-    return {
-        status: 200,
-        msg: 'success',
-        token
+        if (userExists?.id) {
+            return {
+                status: 401,
+                msg: 'User already exists',
+                token: '',
+                user: null
+            }
+        }
+        const user = UserRepo.create({
+            username,
+            password,
+            email
+        });
+    
+        const token = jwt.sign(
+            {id: user.id}, 
+            process.env.JWT_SECRET as Secret, 
+            {expiresIn: 86400});
+    
+        const result = await UserRepo.save(user);
+    
+        return {
+            status: 200,
+            msg: 'success',
+            token,
+            user: {
+                id: result.id,
+                email: result.email,
+                username: result.username
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+        return {
+            status: 500,
+            msg: 'Server Error',
+            token: '',
+            user: null
+        }
     }
 }
 
