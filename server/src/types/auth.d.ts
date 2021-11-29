@@ -1,5 +1,3 @@
-import { User } from "../db/entity";
-
 export interface AuthResult {
     status: number,
     token: string | undefined,
@@ -10,5 +8,7 @@ export interface AuthResult {
 export interface UserResult {
     id: number,
     email: string,
-    username: string
+    username: string,
+    photoUrl: string,
+    online: boolean
 }

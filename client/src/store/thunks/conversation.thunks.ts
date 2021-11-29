@@ -4,7 +4,7 @@ export const fetchConversations = () => async (dispatch: any) => {
     try {
         const token = localStorage.getItem("messenger-token") || "";
 
-        const result = await fetch("/api/conversations/", {
+        const result = await fetch("/api/conversations", {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

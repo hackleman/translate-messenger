@@ -1,20 +1,28 @@
-import { getRepository, DeleteResult } from 'typeorm';
+import { getRepository, Like, Not } from 'typeorm';
 import { User } from '../db/entity';
+import { UserResult } from '../types/auth';
 
-export const getUsers = (): Promise<User[]> => {
-    const userRepo = getRepository(User);
-
-    const users = userRepo.find();
-    return users;
+export const getCurrentUser = (user: User): UserResult | undefined => {
+    if (user) {
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            online: false,
+            photoUrl: user.photoUrl
+        }
+    }
+    return;
 }
 
-export const getUser = (username: string): Promise<User | undefined> => {
+export const getUserByName = async (userId: number, username: string): Promise<User[]> => {
     const userRepo = getRepository(User);
-
-    const user = userRepo.findOne({
+    const users = await userRepo.find({
         where: {
-            username: username
+            username: Like(`%${username}%`),
+            id: Not(userId)
         }
+
     });
-    return user;
+    return users;
 }

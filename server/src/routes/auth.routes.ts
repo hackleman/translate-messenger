@@ -24,20 +24,6 @@ const register = async (req: Request, res: Response) => {
     })
 }
 
-const checkUser = async (req: any, res: Response) => {
-    if (req.user) {
-        return res.json({
-            id: req.user.id,
-            email: req.user.email,
-            username: req.user.username
-        });
-    } else {
-        return res.json({
-            user: null
-        });
-    }
-}
-
 const logout = (req: any, res: Response) => {
     req.user = undefined;
     return res.status(200).json({
@@ -49,6 +35,5 @@ const logout = (req: any, res: Response) => {
 router.post("/register", validateRegister, register);
 router.post("/login", validateLogin, login);
 router.delete("/logout", logout);
-router.get("/user", checkUser)
 
 export default router;

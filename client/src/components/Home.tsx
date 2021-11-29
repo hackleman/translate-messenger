@@ -4,7 +4,10 @@ import { ReduxState } from "../store";
 import { Button, Grid, CssBaseline } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Navigate } from "react-router-dom";
-import { logout, fetchConversations } from '../store/thunks';
+import { logout, fetchConversations, fetchUser } from '../store/thunks';
+import { clearOnLogout } from "../store";
+import { SidebarContainer } from './Sidebar';
+import { ActiveChat } from "./ActiveChat";
 
 const useStyles = makeStyles((_theme: any) => ({
     root: {
@@ -30,7 +33,7 @@ const Home = (props: any) => {
         fetchConversations();
     }, [fetchConversations])
 
-    if (!user?.id) {
+    if (!localStorage.getItem("messenger-token")) {
         if (isLoggedIn) return <Navigate replace to="/login" />
         return <Navigate replace to="/register" />
     }
@@ -44,10 +47,10 @@ const Home = (props: any) => {
             <Button className={classes.logout} onClick={handleLogout}>
                 Logout
             </Button>
-            <Grid>
+            <Grid container component="main" className={classes.root}>
                 <CssBaseline />
-                {/* <SidebarContainer />
-                <ActiveChat /> */}
+                <SidebarContainer />
+                <ActiveChat /> 
             </Grid>
         </>
     )
@@ -64,8 +67,10 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         logout: (id: number) => {
             dispatch(logout(id));
+            dispatch(clearOnLogout());
         },
         fetchConversations: () => {
+            dispatch(fetchUser());
             dispatch(fetchConversations());
         }
     }

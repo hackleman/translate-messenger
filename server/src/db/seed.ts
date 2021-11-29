@@ -20,25 +20,33 @@ export const seedDatabase = async (): Promise<void> => {
         const thomas = UserRepo.create({
             username: "thomas",
             email: "thomas@email.com",
-            password: "123456"
+            password: "123456",
+            photoUrl:
+      "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/6c4faa7d65bc24221c3d369a8889928158daede4_vk5tyg.png",
         });
 
         const santiago = UserRepo.create({
             username: "santiago",
             email: "santiago@gmail.com",
-            password: "123456"
+            password: "123456",
+            photoUrl:
+                "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914468/messenger/8bc2e13b8ab74765fd57f0880f318eed1c3fb001_fownwt.png",
         })
 
         const chiumbo = UserRepo.create({
             username: "chiumbo",
             email: "chiumbo@email.com",
-            password: "123456"
+            password: "123456",
+            photoUrl:
+                "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914467/messenger/thomas_kwzerk.png",
         })
 
         const hualing = await UserRepo.create({
             username: "hualing",
             email: "hualing@email.com",
-            password: "123456"
+            password: "123456",
+            photoUrl:
+                "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/775db5e79c5294846949f1f55059b53317f51e30_s3back.png",
         })
 
         await UserRepo.save(thomas);
@@ -63,6 +71,10 @@ export const seedDatabase = async (): Promise<void> => {
             user1Id: hualing.id,
             user2Id: thomas.id
         })
+
+        santiagoConvo.users = [thomas, santiago];
+        chiumboConvo.users = [chiumbo, thomas];
+        hualingConvo.users = [hualing, thomas];
 
         await ConvoRepo.save(santiagoConvo);
         await ConvoRepo.save(chiumboConvo);

@@ -4,9 +4,16 @@ import {
     Column, 
     OneToMany, 
     ManyToMany, 
-    getConnection } from "typeorm";
+    getConnection, 
+    JoinTable} from "typeorm";
 import User from "./User";
 import Message from './Message';
+
+interface UserResponse {
+    id: number,
+    username: string,
+    photoUrl: string
+}
 
 @Entity()
 export default class Conversation {
@@ -22,9 +29,13 @@ export default class Conversation {
     @OneToMany(() => Message, message => message.conversation,  { onDelete: 'CASCADE' , eager: true})
     messages: Message[];
 
-    @ManyToMany(() => User,  { onDelete: 'CASCADE' })
-    user: User;
+    @ManyToMany(() => User, user => user.conversations, { onDelete: 'CASCADE', eager: true })
+    @JoinTable()
+    users?: User[];
+
     static findConversation: (user1Id: number, user2Id: number) => Promise<Conversation | undefined>;
+
+    public otherUser: UserResponse | undefined;
 }
 
 Conversation.findConversation = async (user1Id: number, user2Id: number): Promise<Conversation | undefined> => {

@@ -1,73 +1,47 @@
-import { gotUser, setFetchingStatus } from "../reducers/user"
+import { gotUser } from "../reducers/user"
+import { clearSearchedUsers, setSearchedUsers } from '../reducers/conversations';
 
 export const fetchUser = () => async(dispatch: any) => {
-    dispatch(setFetchingStatus(true));
-    try {
-        const res = await fetch("/auth/user");
-        const data = await res.json();
-        dispatch(gotUser(data.user));
-    } catch (err) {
-        console.log(err);
-    } finally {
-        dispatch(setFetchingStatus(false));
-    }
-}
+    const token = localStorage.getItem("messenger-token") || "";
 
-export const register = (credentials: any) => async (dispatch: any) => {
     try {
-        const res = await fetch("auth/register", {
-            method: "POST",
-            mode: "cors",
+        const res = await fetch("/api/users", {
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(credentials)
-        })
-
-        const data = await res.json();
-        localStorage.setItem("messenger-token", data.token);
-        dispatch(gotUser(data.user));
-    } catch (err: any) {
-        console.error(err);
-        dispatch(gotUser({
-            error: err.response.data.error || "Server Error"
-        }))
-    }
-}
-
-export const login = (credentials: any) => async (dispatch: any) => {
-    try {
-        const res = await fetch("auth/login", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(credentials)
-        });
-
-        const data = await res.json();
-        localStorage.setItem("messenger-token", data.token);
-        dispatch(gotUser(data.user));
-    } catch (err: any) {
-        dispatch(gotUser({
-            error: err.response.data.error || "Server Error"
-        }))
-    }
-}
-
-export const logout = (_id: number) => async (dispatch: any) => {
-    try {
-        await fetch("/auth/logout", {
-            method: "DELETE",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-access-token": token
             }
         });
-        localStorage.removeItem("messenger-token");
+        const data = await res.json();
+        dispatch(gotUser(data));
+    } catch (err) {
+        console.log(err);
+    }
+}
 
-        dispatch(gotUser({}));
+export const searchUsers = (rawSearchTerm: string) => async (dispatch: any) => {
+    try {
+        const token = localStorage.getItem("messenger-token") || "";
+        const searchTerm = rawSearchTerm.replace(/[^a-z]/gi, '');
+        if (searchTerm.length > 0) {
+            const result = await fetch(`/api/users/${searchTerm}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": token
+                },
+            });
+            const data = await result.json();
+            dispatch(setSearchedUsers(data))
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const clearUsers = () => async (dispatch: any) => {
+    try {
+        dispatch(clearSearchedUsers())
     } catch (err) {
         console.error(err);
     }

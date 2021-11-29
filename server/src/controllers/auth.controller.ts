@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../db/entity';
 import jwt, { Secret } from 'jsonwebtoken';
-import { AuthResult, UserResult } from '../types/auth';
+import { AuthResult } from '../types/auth';
 
 
 export const checkToken = async (req: Request): Promise<User | null> => {
@@ -61,7 +61,9 @@ export const loginUser = async (body: any): Promise<AuthResult> => {
             user: {
                 id: user.id,
                 email: user.email,
-                username: user.username
+                username: user.username,
+                online: false,
+                photoUrl: user.photoUrl
             }
         }
     } catch (error) {
@@ -94,7 +96,8 @@ export const registerUser = async (body: any): Promise<AuthResult> => {
         const user = UserRepo.create({
             username,
             password,
-            email
+            email,
+            photoUrl:"https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/775db5e79c5294846949f1f55059b53317f51e30_s3back.png",
         });
     
         const token = jwt.sign(
@@ -111,7 +114,9 @@ export const registerUser = async (body: any): Promise<AuthResult> => {
             user: {
                 id: result.id,
                 email: result.email,
-                username: result.username
+                username: result.username,
+                online: false,
+                photoUrl: result.photoUrl
             }
         }
     } catch (error) {

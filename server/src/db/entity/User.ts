@@ -14,15 +14,17 @@ export default class User {
     password: string;
 
     @Column()
+    photoUrl: string
+
+    @Column()
     salt: string;
 
     @Column()
     email: string;
 
-    @ManyToMany(() => Conversation,  { onDelete: 'CASCADE' })
-    @JoinTable()
+    @ManyToMany(() => Conversation,  conversation => conversation.users, { onDelete: 'CASCADE' })
     conversations: Conversation[]
-
+    
     private tempPassword: string;
     
     static createSalt: () => string;

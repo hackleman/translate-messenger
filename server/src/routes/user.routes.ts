@@ -1,34 +1,34 @@
 import { Request, Router, Response } from 'express';
 import { userController } from '../controllers';
 
-const getUsers = async (_req: Request, res: Response) => {
+const getUser = async (req: any, res: Response) => {
     try {
-        const users = await userController.getUsers();
-        return res.json(users);
+        const user = userController.getCurrentUser(req.user);
+        return res.json(user);
     } catch (error) {
         return res.status(402).json({
-            msg: "Error getting users"
-        })
+            msg: "Error getting user",
+            user: null
+        });
     }
 }
 
-const getUser = async (req: any, res: Response) => {
+const getUserByName = async (req: any, res: Response) => {
     try {
-        const { username } = req.params;
-        const user = await userController.getUser(username);
-        return res.json({
-            user
-        })
+        const { username } = req.params
+        const users = await userController.getUserByName(req.user.id, username);
+        return res.json(users);
     } catch (error) {
         return res.status(402).json({
-            msg: "Error getting user"
-        })
+            msg: "Error getting user",
+            user: null
+        });
     }
 }
 
 const router = Router();
 
-router.get('/', getUsers);
-router.get('/:username', getUser)
+router.get('/', getUser)
+router.get('/:username', getUserByName)
 
 export default router;

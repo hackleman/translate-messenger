@@ -1,8 +1,8 @@
 export {
-    fetchUser,
     register,
     login,
     logout
-} from './user.thunks';
-
-export { fetchConversations } from './conversation.thunks'
+} from './auth.thunks';
+export { fetchConversations } from './conversation.thunks';
+export { postMessage } from './message.thunk';
+export { fetchUser, searchUsers, clearUsers } from './user.thunks';

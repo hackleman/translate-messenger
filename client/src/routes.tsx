@@ -7,13 +7,13 @@ import { ReduxState } from "./store";
 import { fetchUser } from "./store/thunks";
 
 const AppRouter = (props: any) => {
-    const { user, fetchUser } = props;
+    const { user } = props;
     const [errorMessage, setErrorMessage] = useState('');
     const [snackBarOpen, setSnackBarOpen] = useState(false);
 
     useEffect(() => {
         fetchUser();
-    }, [fetchUser])
+    })
 
     useEffect(() => {
         if(user?.error) {
@@ -25,10 +25,6 @@ const AppRouter = (props: any) => {
             }
         }
     }, [user?.error]);
-
-    if (user?.isFetchingUser) {
-        return <div>Loading.... </div>
-    }
 
     return (
         <>

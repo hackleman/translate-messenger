@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import loggerMiddleware from 'redux-logger';
 import thunkMiddleware from "redux-thunk";
-import { user, conversations } from './reducers';
+import { user, conversations, active } from './reducers';
 
 const CLEAR_ON_LOGOUT = "CLEAR_ON_LOGOUT";
 
@@ -12,7 +12,8 @@ export const clearOnLogout = () => {
 }
 const reducers = combineReducers({
     user,
-    conversations
+    conversations,
+    active
 });
 
 const rootReducer = (state: any, action: any) => {
