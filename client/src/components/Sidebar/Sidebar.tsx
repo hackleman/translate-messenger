@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { connect } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { Search, Chat, CurrentUser } from "./index";
+import { ReduxState } from "../../store";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -37,7 +38,7 @@ const Sidebar = (props: any) => {
     )
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ReduxState) => {
     return {
         conversations: state.conversations
     }

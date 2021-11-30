@@ -2,6 +2,7 @@ import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/material";
 import { connect } from "react-redux";
 import { Header, Messages, Input } from './index';
+import { ReduxState } from "../../store";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -50,7 +51,7 @@ const ActiveChat = (props: any) => {
     );
   };
   
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ReduxState) => {
     return {
       user: state.user,
       conversation:

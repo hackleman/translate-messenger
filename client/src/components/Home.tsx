@@ -32,7 +32,7 @@ const Home = (props: any) => {
         fetchConversations();
     }, [fetchConversations])
 
-    if (!user?.id) {
+    if (user.id === null) {
         if (isLoggedIn) return <Navigate replace to="/login" />
         return <Navigate replace to="/register" />
     }

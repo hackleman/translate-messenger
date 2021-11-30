@@ -50,7 +50,7 @@ export const loginUser = async (body: any): Promise<AuthResult> => {
             }
         }
         const token = jwt.sign(
-            {id: user?.id}, 
+            {id: user.id}, 
             process.env.JWT_SECRET as Secret, 
             {expiresIn: 86400}
         );
@@ -99,13 +99,12 @@ export const registerUser = async (body: any): Promise<AuthResult> => {
             email,
             photoUrl:"https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/775db5e79c5294846949f1f55059b53317f51e30_s3back.png",
         });
-    
+        const result = await UserRepo.save(user);
+
         const token = jwt.sign(
             {id: user.id}, 
             process.env.JWT_SECRET as Secret, 
             {expiresIn: 86400});
-    
-        const result = await UserRepo.save(user);
     
         return {
             status: 200,

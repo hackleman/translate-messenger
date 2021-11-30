@@ -20,9 +20,13 @@ export const register = (credentials: any) => async (dispatch: any) => {
         socket.emit("go-online", data.user.id)
 
     } catch (err: any) {
-        console.error(err);
         dispatch(gotUser({
-            error: err.response.data.error || "Server Error"
+            email: '',
+            photoUrl: '',
+            online: false,
+            id: null,
+            username: '',
+            error: "User already exists"
         }))
     }
 }
@@ -46,7 +50,12 @@ export const login = (credentials: any) => async (dispatch: any) => {
         socket.emit("go-online", data.user.id);
     } catch (err: any) {
         dispatch(gotUser({
-            error: err.response.data.error || "Server Error"
+            email: '',
+            photoUrl: '',
+            online: false,
+            id: null,
+            username: '',
+            error: "Invalid Credentials"
         }))
     }
 }
@@ -62,7 +71,13 @@ export const logout = (id: number) => async (dispatch: any) => {
         });
         localStorage.removeItem("messenger-token");
 
-        dispatch(gotUser({}));
+        dispatch(gotUser({
+            email: '',
+            photoUrl: '',
+            online: false,
+            id: null,
+            username: ''
+        }));
 
         socket.emit("logout", id);
     } catch (err) {

@@ -3,7 +3,6 @@ import { authController } from '../controllers';
 
 export const authGuard = async (req: any, res: Response, next: NextFunction) => {
     const result = await authController.checkToken(req);
-    
     if (result) {
         req.user = result;
         next();

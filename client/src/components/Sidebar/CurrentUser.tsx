@@ -3,7 +3,7 @@ import { makeStyles } from "@mui/styles";
 import { Box, Typography, Button } from "@mui/material";
 import { BadgeAvatar } from "./index";
 import { logout } from "../../store/thunks";
-import { clearOnLogout } from "../../store";
+import { clearOnLogout, ReduxState } from "../../store";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -54,7 +54,7 @@ const CurrentUser = (props: any) => {
         );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ReduxState) => {
     return {
         user: state.user
     };

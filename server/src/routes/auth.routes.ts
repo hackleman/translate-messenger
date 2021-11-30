@@ -4,9 +4,9 @@ import { validateLogin, validateRegister } from '../middleware';
 
 const router = Router();
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: any, res: Response) => {
     const { status, token, user, msg } = await authController.loginUser(req.body);
-
+    req.user = user;
     res.status(status).json({ 
         msg,
         token,
@@ -14,9 +14,9 @@ const login = async (req: Request, res: Response) => {
     })
 }
 
-const register = async (req: Request, res: Response) => {
+const register = async (req: any, res: Response) => {
     const { status, token, msg, user } = await authController.registerUser(req.body);
-
+    req.user = user;
     res.status(status).json({
         msg,
         token,

@@ -1,4 +1,5 @@
 import { AnyAction } from "redux";
+import { Conversation } from "../../types/conversation";
 import { 
     addMessageToStore,
     addSearchedUsersToStore,
@@ -7,7 +8,7 @@ import {
     removeOfflineUserFromStore
  } from "./utils"
 
-const conversationState: any[] = [];
+const ConversationState: Conversation[] = [];
 
 const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 const SET_CONVERSATION = "SET_CONVERSATION";
@@ -17,7 +18,7 @@ const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
 const ADD_ONLINE_USER = "ADD_ONLINE_USER";
 const REMOVE_OFFLINE_USER = "REMOVE_OFFLINE_USER";
 
-export const gotConversations = (conversations: any[]) => {
+export const gotConversations = (conversations: Conversation[]) => {
     return {
         type: GET_CONVERSATIONS,
         conversations
@@ -65,9 +66,9 @@ export const removeOfflineUser = (id: number) => {
     }
 }
 
-type ConversationReducer = typeof conversationState
+type ConversationReducer = typeof ConversationState
 
-const reducer = (state = conversationState, action: AnyAction): ConversationReducer => {
+const reducer = (state = ConversationState, action: AnyAction): ConversationReducer => {
     switch (action.type) {
         case GET_CONVERSATIONS:
             return action.conversations;

@@ -1,6 +1,5 @@
 import { Router, Response } from 'express';
 import { convoController } from '../controllers';
-import { checkUser } from '../middleware';
 
 const getUserConversations = async (req: any, res: Response) => {
     try {
@@ -16,6 +15,6 @@ const getUserConversations = async (req: any, res: Response) => {
 
 const router = Router();
 
-router.get('/', checkUser, getUserConversations);
+router.get('/', getUserConversations);
 
 export default router;

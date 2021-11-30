@@ -10,7 +10,8 @@ export const fetchUser = () => async(dispatch: any) => {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                "x-access-token": token
+                "x-access-token": token,
+                "pragma": "no-cache"
             }
         });
         const data = await res.json();

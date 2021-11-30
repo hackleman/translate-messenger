@@ -4,16 +4,11 @@ import { Home } from './components';
 import { Login, Signup, SnackbarError } from './components/Authentication';
 import { connect } from "react-redux";
 import { ReduxState } from "./store";
-import { fetchUser } from "./store/thunks";
 
 const AppRouter = (props: any) => {
     const { user } = props;
     const [errorMessage, setErrorMessage] = useState('');
     const [snackBarOpen, setSnackBarOpen] = useState(false);
-
-    useEffect(() => {
-        fetchUser();
-    })
 
     useEffect(() => {
         if(user?.error) {
@@ -54,12 +49,4 @@ const mapStateToProps = (state: ReduxState) => {
     }
 };
 
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        fetchUser() {
-            dispatch(fetchUser());
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);
+export default connect(mapStateToProps)(AppRouter);
