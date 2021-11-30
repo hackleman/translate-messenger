@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { ReduxState } from "../store";
-import { Button, Grid, CssBaseline } from "@mui/material";
+import { Grid, CssBaseline } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Navigate } from "react-router-dom";
-import { logout, fetchConversations, fetchUser } from '../store/thunks';
-import { clearOnLogout } from "../store";
+import { fetchConversations, fetchUser } from '../store/thunks';
 import { SidebarContainer } from './Sidebar';
 import { ActiveChat } from "./ActiveChat";
 
@@ -20,7 +19,7 @@ const useStyles = makeStyles((_theme: any) => ({
 
 const Home = (props: any) => {
     const classes = useStyles();
-    const { user, logout, fetchConversations } = props;
+    const { user, fetchConversations } = props;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
@@ -33,20 +32,12 @@ const Home = (props: any) => {
         fetchConversations();
     }, [fetchConversations])
 
-    if (!localStorage.getItem("messenger-token")) {
+    if (!user?.id) {
         if (isLoggedIn) return <Navigate replace to="/login" />
         return <Navigate replace to="/register" />
     }
-
-    const handleLogout = async () => {
-        await logout(user?.id)  
-    }
-
     return (
         <>
-            <Button className={classes.logout} onClick={handleLogout}>
-                Logout
-            </Button>
             <Grid container component="main" className={classes.root}>
                 <CssBaseline />
                 <SidebarContainer />
@@ -65,10 +56,6 @@ const mapStateToProps = (state: ReduxState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        logout: (id: number) => {
-            dispatch(logout(id));
-            dispatch(clearOnLogout());
-        },
         fetchConversations: () => {
             dispatch(fetchUser());
             dispatch(fetchConversations());

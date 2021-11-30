@@ -62,7 +62,7 @@ export const loginUser = async (body: any): Promise<AuthResult> => {
                 id: user.id,
                 email: user.email,
                 username: user.username,
-                online: false,
+                online: true,
                 photoUrl: user.photoUrl
             }
         }
@@ -115,7 +115,7 @@ export const registerUser = async (body: any): Promise<AuthResult> => {
                 id: result.id,
                 email: result.email,
                 username: result.username,
-                online: false,
+                online: true,
                 photoUrl: result.photoUrl
             }
         }

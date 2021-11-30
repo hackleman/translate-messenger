@@ -1,5 +1,6 @@
 import { gotUser } from "../reducers/user"
 import { clearSearchedUsers, setSearchedUsers } from '../reducers/conversations';
+import socket from "../../socket";
 
 export const fetchUser = () => async(dispatch: any) => {
     const token = localStorage.getItem("messenger-token") || "";
@@ -14,6 +15,9 @@ export const fetchUser = () => async(dispatch: any) => {
         });
         const data = await res.json();
         dispatch(gotUser(data));
+        if (data.id) {
+            socket.emit("go-online", data.id)
+        }
     } catch (err) {
         console.log(err);
     }

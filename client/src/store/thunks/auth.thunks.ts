@@ -1,3 +1,4 @@
+import socket from "../../socket";
 import { gotUser } from "../reducers/user"
 
 export const register = (credentials: any) => async (dispatch: any) => {
@@ -13,7 +14,11 @@ export const register = (credentials: any) => async (dispatch: any) => {
 
         const data = await res.json();
         localStorage.setItem("messenger-token", data.token);
+
         dispatch(gotUser(data.user));
+
+        socket.emit("go-online", data.user.id)
+
     } catch (err: any) {
         console.error(err);
         dispatch(gotUser({
@@ -35,7 +40,10 @@ export const login = (credentials: any) => async (dispatch: any) => {
 
         const data = await res.json();
         localStorage.setItem("messenger-token", data.token);
+
         dispatch(gotUser(data.user));
+
+        socket.emit("go-online", data.user.id);
     } catch (err: any) {
         dispatch(gotUser({
             error: err.response.data.error || "Server Error"
@@ -43,7 +51,7 @@ export const login = (credentials: any) => async (dispatch: any) => {
     }
 }
 
-export const logout = (_id: number) => async (dispatch: any) => {
+export const logout = (id: number) => async (dispatch: any) => {
     try {
         await fetch("/auth/logout", {
             method: "DELETE",
@@ -55,6 +63,8 @@ export const logout = (_id: number) => async (dispatch: any) => {
         localStorage.removeItem("messenger-token");
 
         dispatch(gotUser({}));
+
+        socket.emit("logout", id);
     } catch (err) {
         console.error(err);
     }

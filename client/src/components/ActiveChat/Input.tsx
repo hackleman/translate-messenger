@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FormControl, FilledInput } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
+import { postMessage } from "../../store/thunks";
 
 const useStyles = makeStyles(() => ({
     root: {

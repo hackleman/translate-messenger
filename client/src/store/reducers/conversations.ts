@@ -1,13 +1,21 @@
 import { AnyAction } from "redux";
-import { addSearchedUsersToStore } from "./utils"
+import { 
+    addMessageToStore,
+    addSearchedUsersToStore,
+    addConversationToStore,
+    addOnlineUserToStore,
+    removeOfflineUserFromStore
+ } from "./utils"
 
 const conversationState: any[] = [];
 
 const GET_CONVERSATIONS = "GET_CONVERSATIONS";
+const SET_CONVERSATION = "SET_CONVERSATION";
 const SET_MESSAGE = "SET_MESSAGE";
-const ADD_CONVERSATION = "ADD_CONVERSATION";
 const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
+const ADD_ONLINE_USER = "ADD_ONLINE_USER";
+const REMOVE_OFFLINE_USER = "REMOVE_OFFLINE_USER";
 
 export const gotConversations = (conversations: any[]) => {
     return {
@@ -16,10 +24,17 @@ export const gotConversations = (conversations: any[]) => {
     }
 }
 
-export const setNewMessage = (message: any, sender: any) => {
+export const setNewMessage = (payload: any) => {
     return {
         type: SET_MESSAGE,
-        payload: { message, sender: sender || null}
+        payload
+    }
+}
+
+export const setNewConversation = (payload: any) => {
+    return {
+        type: SET_CONVERSATION,
+        payload
     }
 }
 
@@ -36,13 +51,17 @@ export const clearSearchedUsers = () => {
     }
 }
 
-export const addConversation = (recipientId: number, newMessage: any) => {
+export const addOnlineUser = (id: number) => {
     return {
-        type: ADD_CONVERSATION,
-        payload: {
-            recipientId,
-            newMessage
-        }
+        type: ADD_ONLINE_USER,
+        id
+    }
+}
+
+export const removeOfflineUser = (id: number) => {
+    return {
+        type: REMOVE_OFFLINE_USER,
+        id
     }
 }
 
@@ -52,10 +71,18 @@ const reducer = (state = conversationState, action: AnyAction): ConversationRedu
     switch (action.type) {
         case GET_CONVERSATIONS:
             return action.conversations;
+        case SET_CONVERSATION:
+            return addConversationToStore(state, action.payload);
+        case SET_MESSAGE:
+            return addMessageToStore(state, action.payload);
         case SET_SEARCHED_USERS:
             return addSearchedUsersToStore(state, action.users);
         case CLEAR_SEARCHED_USERS:
             return state.filter((convo) => convo.id)
+        case ADD_ONLINE_USER:
+            return addOnlineUserToStore(state, action.id)
+        case REMOVE_OFFLINE_USER:
+            return removeOfflineUserFromStore(state, action.id)
         default:
             return state;
     }

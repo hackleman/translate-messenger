@@ -1,7 +1,9 @@
-import { makeStyles } from "@mui/styles";
-import { Box, Typography } from "@mui/material";
 import { connect } from "react-redux";
+import { makeStyles } from "@mui/styles";
+import { Box, Typography, Button } from "@mui/material";
 import { BadgeAvatar } from "./index";
+import { logout } from "../../store/thunks";
+import { clearOnLogout } from "../../store";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -32,8 +34,12 @@ const useStyles = makeStyles(() => ({
 
 const CurrentUser = (props: any) => {
     const classes = useStyles();
-
     const user = props.user || {};
+    const { logout } = props;
+    
+    const handleLogout = async () => {
+        await logout(user?.id)  
+    }
 
     return (
             <Box className={classes.root}>
@@ -41,6 +47,9 @@ const CurrentUser = (props: any) => {
             <Box className={classes.subContainer}>
                 <Typography className={classes.username}>{user.username}</Typography>
             </Box>
+            <Button onClick={handleLogout}>
+                Logout
+            </Button>
             </Box>
         );
 };
@@ -51,4 +60,13 @@ const mapStateToProps = (state: any) => {
     };
 };
 
-export default connect(mapStateToProps)(CurrentUser);
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+      logout: (id: number) => {
+          dispatch(logout(id));
+          dispatch(clearOnLogout());
+      }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentUser);

@@ -8,7 +8,7 @@ export const getCurrentUser = (user: User): UserResult | undefined => {
             id: user.id,
             email: user.email,
             username: user.username,
-            online: false,
+            online: true,
             photoUrl: user.photoUrl
         }
     }

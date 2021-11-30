@@ -41,7 +41,7 @@ export const seedDatabase = async (): Promise<void> => {
                 "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914467/messenger/thomas_kwzerk.png",
         })
 
-        const hualing = await UserRepo.create({
+        const hualing = UserRepo.create({
             username: "hualing",
             email: "hualing@email.com",
             password: "123456",
@@ -49,10 +49,37 @@ export const seedDatabase = async (): Promise<void> => {
                 "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/775db5e79c5294846949f1f55059b53317f51e30_s3back.png",
         })
 
+        const ashanti = UserRepo.create({
+            username: "ashanti",
+            email: "ashanti@email.com",
+            password: "123456",
+            photoUrl:
+              "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/68f55f7799df6c8078a874cfe0a61a5e6e9e1687_e3kxp2.png",
+        })
+
+        const julia = UserRepo.create({
+            username: "julia",
+            email: "julia@email.com",
+            password: "123456",
+            photoUrl:
+                "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914468/messenger/d9fc84a0d1d545d77e78aaad39c20c11d3355074_ed5gvz.png",
+        })
+
+        const cheng = UserRepo.create({
+            username: "cheng",
+            email: "cheng@email.com",
+            password: "123456",
+            photoUrl:
+                "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/9e2972c07afac45a8b03f5be3d0a796abe2e566e_ttq23y.png",
+        })
+
         await UserRepo.save(thomas);
         await UserRepo.save(santiago);
         await UserRepo.save(chiumbo);
         await UserRepo.save(hualing);
+        await UserRepo.save(cheng);
+        await UserRepo.save(julia);
+        await UserRepo.save(ashanti);
 
     /**
      *  CONVOS

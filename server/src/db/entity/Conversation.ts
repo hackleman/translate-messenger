@@ -11,6 +11,7 @@ import Message from './Message';
 
 interface UserResponse {
     id: number,
+    online: boolean,
     username: string,
     photoUrl: string
 }

@@ -1,11 +1,7 @@
 import { getRepository } from 'typeorm';
-import { Conversation, User, Message} from '../db/entity';
+import { Conversation, User } from '../db/entity';
 
-// export const getAllConversations = (): Promise<Conversation[]> => {
-//     const ConvoRepo = getRepository(Conversation);
-//     const convos = ConvoRepo.find({});
-//     return convos;
-// }
+const onlineUsers = require('../onlineUsers');
 
 export const getUserConversations = async (user: User): Promise<Conversation[]> => {
     const ConvoRepo = getRepository(Conversation);
@@ -19,9 +15,15 @@ export const getUserConversations = async (user: User): Promise<Conversation[]> 
     convos.forEach(convo => {
         const temp = convo.users?.find(convouser => convouser.id !== user.id);
         let otherUser = undefined;
+        let userOnline = false;
         if (temp) {
+
+            if (onlineUsers.includes(temp.id)) {
+                userOnline = true;
+            }
             otherUser = {
                 id: temp.id,
+                online: userOnline,
                 username: temp.username,
                 photoUrl: temp.photoUrl
             }
