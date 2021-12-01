@@ -3,11 +3,11 @@ import loggerMiddleware from 'redux-logger';
 import thunkMiddleware from "redux-thunk";
 import { user, conversations, active } from './reducers';
 
-const CLEAR_ON_LOGOUT = "CLEAR_ON_LOGOUT";
+const CLEAR_STATE = "CLEAR_STATE";
 
-export const clearOnLogout = () => {
+export const clearState = () => {
     return {
-        type: CLEAR_ON_LOGOUT
+        type: CLEAR_STATE
     }
 }
 const reducers = combineReducers({
@@ -17,7 +17,7 @@ const reducers = combineReducers({
 });
 
 const rootReducer = (state: any, action: any) => {
-    if (action.type === CLEAR_ON_LOGOUT) {
+    if (action.type === CLEAR_STATE) {
         state = undefined;
     }
     return reducers(state, action);
@@ -28,3 +28,4 @@ export const store = createStore(
     applyMiddleware(loggerMiddleware, thunkMiddleware));
 
 export type ReduxState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

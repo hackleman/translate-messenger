@@ -1,23 +1,31 @@
 import socket from "../../socket";
 import { gotUser } from "../reducers/user"
+import { 
+    getCurrentUserFromDB,
+    postLoginToDB, 
+    postLogoutToDB, 
+    postRegistrationToDB,
+ } from "./utils";
+
+export const fetchUser = () => async(dispatch: any) => {
+    try {
+        const data = await getCurrentUserFromDB();
+
+        dispatch(gotUser(data));
+        if (data.id) {
+            socket.emit("go-online", data.id)
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 export const register = (credentials: any) => async (dispatch: any) => {
     try {
-        const res = await fetch("auth/register", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(credentials)
-        })
-
-        const data = await res.json();
-        localStorage.setItem("messenger-token", data.token);
+        const data = await postRegistrationToDB(credentials);
 
         dispatch(gotUser(data.user));
-
-        socket.emit("go-online", data.user.id)
+        socket.emit("go-online", data.user.id);
 
     } catch (err: any) {
         dispatch(gotUser({
@@ -33,21 +41,11 @@ export const register = (credentials: any) => async (dispatch: any) => {
 
 export const login = (credentials: any) => async (dispatch: any) => {
     try {
-        const res = await fetch("auth/login", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(credentials)
-        });
-
-        const data = await res.json();
-        localStorage.setItem("messenger-token", data.token);
+        const data = await postLoginToDB(credentials);
 
         dispatch(gotUser(data.user));
-
         socket.emit("go-online", data.user.id);
+
     } catch (err: any) {
         dispatch(gotUser({
             email: '',
@@ -62,14 +60,7 @@ export const login = (credentials: any) => async (dispatch: any) => {
 
 export const logout = (id: number) => async (dispatch: any) => {
     try {
-        await fetch("/auth/logout", {
-            method: "DELETE",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        localStorage.removeItem("messenger-token");
+        postLogoutToDB();
 
         dispatch(gotUser({
             email: '',
@@ -80,7 +71,9 @@ export const logout = (id: number) => async (dispatch: any) => {
         }));
 
         socket.emit("logout", id);
+
     } catch (err) {
         console.error(err);
     }
 }
+

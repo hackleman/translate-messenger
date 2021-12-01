@@ -20,10 +20,11 @@ export const addMessageToStore = (state: any, payload: any) => {
     const { conversationId, message } = payload;
     return state.map((convo: any) => {
         if (convo.id === conversationId) {
-            const convoIds = convo.messages.map((message: any) => message.id);
-            if (!convoIds.includes(message.id)) {
+            const messageIds = convo.messages.map((message: any) => message.id);
+            if (!messageIds.includes(message.id)) {
                 const convoCopy = {...convo}
                 convoCopy.messages.push(message);
+                convoCopy.latestMessageText = message.text;
                 return convoCopy
             }
             return convo;
@@ -34,17 +35,43 @@ export const addMessageToStore = (state: any, payload: any) => {
 }
 
 export const addConversationToStore = (state: any, payload: any) => {
-    const { message, conversationId } = payload;
-    return state.map((convo: any) => {
-        if (convo.otherUser.id === message.recipientId) {
-            const convoCopy = {...convo }
-            convoCopy.id = conversationId;
-            convoCopy.messages.push(message);
-            return convoCopy;
-        } else {
-            return convo;
-        }
-    })
+    const { message, conversationId, isSender } = payload;
+    const convoIds = state.map((convo: any) => convo.id);
+    
+    if (!isSender && !convoIds.includes(conversationId)) {
+        const newState = [...state];
+        const newConvo = {
+            id: conversationId,
+            user1Id: message.senderId,
+            user2Id: message.recipientId,
+            messages: [message],
+            latestMessageText: message.text,
+            otherUser: {
+                id: message.senderId,
+                online: true,
+                photoUrl: "",
+                username: "thomas"
+            }
+        };
+        newState.push(newConvo)
+        return newState;
+    } else {
+        return state.map((convo: any) => {
+            if (convo.otherUser.id === message.recipientId) {
+                const convoCopy = {...convo }
+                const messageIds = convoCopy.messages.map((message: any) => message.id);
+
+                convoCopy.id = conversationId;
+                if (!messageIds.includes(message.id)) {
+                    convoCopy.messages.push(message);
+                    convoCopy.latestMessageText = message.text;
+                }
+                return convoCopy;
+            } else {
+                return convo;
+            }
+        })
+    }
 }
 
 export const addOnlineUserToStore = (state: any, id: number) => {

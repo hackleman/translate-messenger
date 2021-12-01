@@ -15,7 +15,8 @@ export const postMessage = async (user: User, body: any): Promise<any> => {
             senderId,
             recipientId,
             text,
-            conversation
+            conversation,
+            read: false
         });
 
         await MessageRepo.save(message);
@@ -25,7 +26,8 @@ export const postMessage = async (user: User, body: any): Promise<any> => {
                 id: message.id,
                 recipientId: message.recipientId,
                 senderId: message.senderId,
-                text: message.text
+                text: message.text,
+                read: message.read
             },
             newConvo: false,
             conversationId: conversation.id
@@ -51,7 +53,8 @@ export const postMessage = async (user: User, body: any): Promise<any> => {
         senderId,
         recipientId,
         text,
-        conversation: newConvo
+        conversation: newConvo,
+        read: false
     })
     await MessageRepo.save(message);
 
@@ -60,7 +63,8 @@ export const postMessage = async (user: User, body: any): Promise<any> => {
             id: message.id,
             recipientId: message.recipientId,
             senderId: message.senderId,
-            text: message.text
+            text: message.text,
+            read: message.read
         },
         newConvo: true,
         conversationId: newConvo.id

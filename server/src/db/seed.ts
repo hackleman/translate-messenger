@@ -115,26 +115,30 @@ export const seedDatabase = async (): Promise<void> => {
             conversation: santiagoConvo,
             senderId: santiago.id,
             recipientId: thomas.id,
-            text: "Where are you from?"
+            text: "Where are you from?",
+            read: true
         })
         const message2 = MessageRepo.create({
             conversation: santiagoConvo,
             senderId: santiago.id,
             recipientId: thomas.id,
-            text: "I'm From New York"
+            text: "I'm From New York",
+            read: true
         })
         const message3 = MessageRepo.create({
             conversation: santiagoConvo,
             senderId: thomas.id,
             recipientId: santiago.id,
-            text: "please send pics?"
+            text: "please send pics?",
+            read: true
         })
 
         const message4 = MessageRepo.create({
             conversation: chiumboConvo,
             senderId: chiumbo.id,
             recipientId: thomas.id,
-            text: "Sure! What time?"
+            text: "Sure! What time?",
+            read: false
         })
 
         await MessageRepo.save(message1)
@@ -148,7 +152,8 @@ export const seedDatabase = async (): Promise<void> => {
                     conversation: hualingConvo,
                     senderId: hualing.id,
                     recipientId: thomas.id,
-                    text: "😂 😂 😂"
+                    text: "😂 😂 😂",
+                    read: false
                 })
             )
         }

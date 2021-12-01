@@ -32,7 +32,9 @@ const Sidebar = (props: any) => {
             {conversations
                 .filter((conversation: any) => conversation.otherUser.username.includes(searchTerm))
                 .map((conversation: any) => {
-                    return <Chat conversation={conversation} key={conversation.otherUser.username} />
+                    return (
+                        <Chat conversation={conversation} key={conversation.otherUser.username} />
+                    )
                 })}
         </Box>
     )

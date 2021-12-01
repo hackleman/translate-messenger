@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import { makeStyles } from "@mui/styles";
-import { Box } from "@mui/material";
+import { Box, Badge } from "@mui/material";
 import { BadgeAvatar, ChatContent } from './index';
-import { setActiveChat } from '../../store/reducers/active'; 
+import { setActiveConversation } from "../../store/thunks";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -15,35 +15,52 @@ const useStyles = makeStyles(() => ({
       "&:hover": {
         cursor: "grab"
       }
+    },
+    badge: {
+        width: 14,
+        top: '1.75rem',
+        right: '2vw',
+        borderRadius: "50%",
+        backgroundColor: "#3A8DFF",
+        color: "white",
+        fontWeight: 600
+    },
+    badgeRoot: {
+        width: '100%'
     }
   }));
 
 const Chat = (props: any) => {
     const classes = useStyles();
-    const { conversation } = props;
+    const { conversation, setActiveChat } = props;
     const { otherUser } = conversation;
 
     const handleClick = async (conversation: any) => {
-        await props.setActiveChat(conversation.otherUser.username);
+        await setActiveChat(conversation.otherUser.username);
     }
 
     return (
-        <Box onClick={() => handleClick(conversation)} className={classes.root}>
-            <BadgeAvatar
-                username={otherUser.username}
-                online={otherUser.online}
-                photoUrl={otherUser.photoUrl}
-                sidebar={true}
-            />
-            <ChatContent conversation={conversation} />
-        </Box>
+            <Box onClick={() => handleClick(conversation)} className={classes.root}>
+                <Badge
+                    classes={{ badge: `${classes.badge}` }}
+                    className={classes.badgeRoot}
+                    badgeContent={conversation.unreadCount}>
+                    <BadgeAvatar
+                        username={otherUser.username}
+                        online={otherUser.online}
+                        photoUrl={otherUser.photoUrl}
+                        sidebar={true}
+                    />
+                    <ChatContent conversation={conversation} />
+                </Badge>
+            </Box>
     )
 }
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        setActiveChat: (id: string) => {
-            dispatch(setActiveChat(id));
+        setActiveChat: (username: string) => {
+            dispatch(setActiveConversation(username));
         }
     }
 }

@@ -5,7 +5,7 @@ import {
     addSearchedUsersToStore,
     addConversationToStore,
     addOnlineUserToStore,
-    removeOfflineUserFromStore
+    removeOfflineUserFromStore,
  } from "./utils"
 
 const ConversationState: Conversation[] = [];

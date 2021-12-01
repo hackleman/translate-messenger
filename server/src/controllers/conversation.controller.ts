@@ -30,6 +30,30 @@ export const getUserConversations = async (user: User): Promise<Conversation[]> 
         }
         convo.otherUser = otherUser;
         delete convo.users;
+
+        const messages = [...convo.messages];
+
+        if (messages.length > 0) {
+            convo.latestMessageText = messages[messages.length - 1].text;
+            
+            messages.reverse();
+            const lastSentIndex = messages.findIndex((message) => message.senderId === user.id);
+
+            if (lastSentIndex === 0) {
+                convo.unreadCount = 0
+            } else {
+                let unread = 0;
+
+                for (let message of messages) {
+                    if (!message.read && message.senderId !== user.id) {
+                        unread += 1;
+                    } else {
+                        break;
+                    }
+                }
+                convo.unreadCount = unread;
+            }
+        }
     })
 
     return convos;

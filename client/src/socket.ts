@@ -3,7 +3,8 @@ import { store } from "./store";
 import { 
     addOnlineUser,
     removeOfflineUser,
-    setNewMessage
+    setNewMessage,
+    setNewConversation
  } from "./store/reducers/conversations"
 
 const socket = io(window.location.origin);
@@ -11,16 +12,29 @@ const socket = io(window.location.origin);
 socket.on("connect", () => {
     console.log("connected to server");
 
-    socket.on("add-online-user", (id) => {
+    socket.once("add-online-user", (id) => {
         store.dispatch(addOnlineUser(id));
     });
 
-    socket.on("remove-offline-user", (id) => {
+    socket.once("remove-offline-user", (id) => {
         store.dispatch(removeOfflineUser(id));
     });
 
-    socket.on("new-message", (data) => {
-        store.dispatch(setNewMessage(data));
+    socket.once("new-message", (data) => {
+        const user = store.getState().user.id;
+        const recipient = data.message.recipientId;
+        if (user === recipient) {
+            store.dispatch(setNewMessage(data));
+        }
+    })
+
+    socket.once("new-conversation", (data) => {
+        const user = store.getState().user.id;
+        const recipient = data.message.recipientId;
+        if (user === recipient) {
+            data.isSender = false;
+            store.dispatch(setNewConversation(data));
+        }
     })
 })
 

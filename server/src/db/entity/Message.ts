@@ -15,6 +15,9 @@ export default class Message {
     @Column()
     text: string;
 
+    @Column()
+    read: boolean;
+
     @ManyToOne(() => Conversation, conversation => conversation.messages,  { onDelete: 'CASCADE' })
     @JoinColumn({name: 'conversationId'})
     conversation: Conversation;
