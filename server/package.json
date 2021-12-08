@@ -4,13 +4,17 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node-dev --respawn src/bin/www",
+    "start": "node dist/bin/www",
     "clean": "cross-env NODE_ENV='test' npm start",
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hackleman/translate-messenger.git"
+  },
+  "engines": {
+    "npm": "16.x"
   },
   "keywords": [],
   "author": "hackleman.dev",
