@@ -1,5 +1,8 @@
 import { makeStyles } from "@mui/styles";
-import { Box, Typography } from "@mui/material";
+import { 
+  Box, 
+  Typography,
+  Button } from "@mui/material";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -7,19 +10,17 @@ const useStyles = makeStyles(() => ({
       alignItems: "center",
       justifyContent: "space-between",
       height: 89,
-      marginBottom: 34,
-      boxShadow: "0 2px 20px 0 rgba(88,133,196,0.10)"
+      borderRadius: 12,
+      paddingLeft: '2rem',
+      boxShadow: "1px 2px 2px 1px gray"
     },
     content: {
       display: "flex",
       alignItems: "center",
-      marginLeft: 24
     },
-    username: {
-      fontSize: 20,
-      letterSpacing: -0.29,
-      fontWeight: "bold",
-      marginRight: 14
+    button: {
+      borderRadius: 12,
+      paddingRight: '2rem'
     },
     statusText: {
       fontSize: 12,
@@ -42,18 +43,25 @@ const useStyles = makeStyles(() => ({
       opacity: 0.5
     }
 }));
+
 const Header = (props: any) => {
     const classes = useStyles();
     const { username, online } = props;
+
+    const executeScroll = () => {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
   
     return (
       <Box className={classes.root}>
         <Box className={classes.content}>
-          <Typography className={classes.username}>{username}</Typography>
+          <Typography sx={{marginRight: '1rem', fontSize: 20}}>{username}</Typography>
           <Box className={`${classes.statusDot}`}></Box>
           <Typography className={classes.statusText}>{online ? "Online" : "Offline"}</Typography>
         </Box>
-        {/* <MoreHorizIcon classes={{ root: classes.ellipsis }} /> */}
+        <Button className={classes.button} onClick={executeScroll}>
+          back
+        </Button>
       </Box>
     );
 };

@@ -1,89 +1,89 @@
 import { ComponentProps } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { login } from "../../store/thunks";
-import { connect } from "react-redux";
-import { ReduxState } from "../../store";
 import { 
     Box, 
-    Grid, 
-    Typography, 
-    Button, 
-    FormControl, 
-    TextField
+    Grid,
+    Button,
+    Hidden
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { LoginForm } from './index';
+import Image from './bg-img.png';
+
+const useStyles = makeStyles((theme: any) => ({
+    root: {
+        height: '100vh',
+        width: '100vw',
+    },
+    left: {
+        backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(0,0,255,0.5)), url(${Image})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+    },
+    banner: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        flexGrow: 1
+    },
+    form: {
+        width: '70%',
+        alignItems: 'center',
+        display: 'flex',
+        flexGrow: 2
+    },
+    footer: {
+        flexGrow: 1
+    },
+    bannerText: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0 1rem 0 3rem',
+    },
+    bannerButton: {
+        display: 'flex',
+        alignSelf: 'center',
+        justifyContent: 'center'
+    },
+}));
 
 const Login = (props: ComponentProps<any>) => {
-    const { user, login } = props;
-    const navigate = useNavigate();
-
-    const handleLogin = async (ev: any) => {
-        ev.preventDefault();
-        const username = ev.target.username.value;
-        const password = ev.target.password.value;
-
-        await login({ username, password });
-    }
-
-    if (user?.id) {
-        return <Navigate replace to="/home" />;
-    }
+    const classes = useStyles();
+    const { handleLogin, navigateToRegister } = props;
 
     return (
-        <Grid container>
-            <Box>
-                <Grid container item>
-                    <Typography>Need to Register?</Typography>
-                    <Button onClick={() => navigate("/register")}> Register </Button>
-                </Grid>
-            </Box>
-            <form onSubmit={handleLogin}>
-                <Grid>
-                    <Grid>
-                        <FormControl margin="normal" required>
-                            <TextField
-                                aria-label="username"
-                                label="username"
-                                name="username"
-                                type="text"
-                                required
-                            />
-                        </FormControl>
+        <Grid container className={classes.root}>
+            <Hidden mdDown>
+                <Grid container direction="column" item xs={0} md={4} className={classes.left} />
+            </Hidden>
+            <Grid 
+                container 
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                item 
+                xs={12} md={8} >
+                <Grid container className={classes.banner}>
+                    <Grid item xs={6} md={4} className={classes.bannerText}>
+                        Don't Have An Account?
                     </Grid>
-                    <Grid>
-                        <FormControl margin="normal" required>
-                            <TextField
-                                aria-label="password"
-                                label="password"
-                                name="password"
-                                inputProps={{minLength: 6}}
-                                type="password"
-                                required
-                            />
-                        </FormControl>
-                    </Grid>
-                    <Grid>
-                        <Button type="submit" variant="contained" size="large" >
-                            Login
+                    <Grid item xs={6} md={4} className={classes.bannerButton}>
+                        <Button 
+                            onClick={navigateToRegister} 
+                            variant="outlined" 
+                            size="medium"
+                        > Create Account
                         </Button> 
                     </Grid>
                 </Grid>
-            </form>
+                <Grid className={classes.form}>
+                    <LoginForm 
+                        handleLogin={handleLogin} 
+                    />
+                </Grid>
+                <Box className={classes.footer} />
+            </Grid>
         </Grid>
     )
 }
 
-const mapStateToProps = (state: ReduxState) => {
-    return {
-        user: state.user
-    }
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        login: (credentials: any) => {
-            dispatch(login(credentials));
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

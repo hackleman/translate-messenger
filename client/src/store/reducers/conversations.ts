@@ -6,12 +6,14 @@ import {
     addConversationToStore,
     addOnlineUserToStore,
     removeOfflineUserFromStore,
+    updateConversationInStore,
  } from "./utils"
 
 const ConversationState: Conversation[] = [];
 
 const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 const SET_CONVERSATION = "SET_CONVERSATION";
+const UPDATE_CONVERSATION = "UPDATE_CONVERSATION";
 const SET_MESSAGE = "SET_MESSAGE";
 const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
@@ -25,6 +27,12 @@ export const gotConversations = (conversations: Conversation[]) => {
     }
 }
 
+export const updateConversation = (payload: any) => {
+    return {
+        type: UPDATE_CONVERSATION,
+        payload
+    }
+}
 export const setNewMessage = (payload: any) => {
     return {
         type: SET_MESSAGE,
@@ -74,6 +82,8 @@ const reducer = (state = ConversationState, action: AnyAction): ConversationRedu
             return action.conversations;
         case SET_CONVERSATION:
             return addConversationToStore(state, action.payload);
+        case UPDATE_CONVERSATION:
+            return updateConversationInStore(state, action.payload);
         case SET_MESSAGE:
             return addMessageToStore(state, action.payload);
         case SET_SEARCHED_USERS:

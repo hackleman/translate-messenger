@@ -7,47 +7,57 @@ import { ReduxState } from "../../store";
 const useStyles = makeStyles(() => ({
     root: {
       display: "flex",
-      flexGrow: 8,
-      flexDirection: "column"
-    },
-    chatContainer: {
+      flexDirection: "column",
+      height: '100vh',
       marginLeft: 41,
       marginRight: 41,
+      justifyContent: 'space-between'
+    },
+    messages: {
       display: "flex",
       flexDirection: "column",
       flexGrow: 1,
       justifyContent: "space-between",
-      maxHeight: '85vh'
-    }
+      padding: '1rem',
+      maxHeight: '75vh',
+      borderRadius: '1rem',
+    },
   }));
 
 const ActiveChat = (props: any) => {
     const classes = useStyles();
     const { user } = props;
     const conversation = props.conversation || {};
+    
     return (
-      <Box className={classes.root}>
-        {conversation.otherUser && (
-          <>
+      <>
+        {conversation.otherUser ? (
+          <Box className={classes.root}>
             <Header
               username={conversation.otherUser.username}
               online={conversation.otherUser.online || false}
             />
-            <Box className={classes.chatContainer}>
+            <Box className={classes.messages}>
               <Messages
                 messages={conversation.messages}
+                latestRead={conversation.latestReadMessage}
                 otherUser={conversation.otherUser}
                 userId={user.id}
               />
-              <Input
-                otherUser={conversation.otherUser}
-                conversationId={conversation.id}
-                user={user}
-              />
             </Box>
-          </>
-        )}
-      </Box>
+            <Box>
+              <Input
+                  otherUser={conversation.otherUser}
+                  conversationId={conversation.id}
+                  user={user}
+                />
+            </Box>
+          </Box>
+        ) : 
+          <Box>
+          </Box>
+      }
+      </>
     );
   };
   

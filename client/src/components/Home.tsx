@@ -12,8 +12,11 @@ const useStyles = makeStyles((_theme: any) => ({
     root: {
         height: "100vh"
     },
-    logout: {
-        color: "#ff00ff"
+    sidebar: {
+        maxheight: '100vh'
+    },
+    activeChat: {
+        maxHeight: '100vh'
     }
 }));
 
@@ -40,8 +43,12 @@ const Home = (props: any) => {
         <>
             <Grid container component="main" className={classes.root}>
                 <CssBaseline />
-                <SidebarContainer />
-                <ActiveChat /> 
+                <Grid className={classes.sidebar} item xs={12} md={3}>
+                    <SidebarContainer />
+                </Grid>
+                <Grid className={classes.activeChat} item xs={12} md={9}>
+                    <ActiveChat /> 
+                </Grid>
             </Grid>
         </>
     )

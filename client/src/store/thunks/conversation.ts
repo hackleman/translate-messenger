@@ -43,9 +43,9 @@ export const clearUsers = () => async (dispatch: any) => {
 export const postMessage = (body: any) => async (dispatch: any) => {
     try {
         const data = await postMessageToDB(body);
+        data.isSender = true;
 
         if (data.newConvo) {
-            data.isSender = true;
             dispatch(setNewConversation(data))
             socket.emit("new-conversation", data)
         } else {

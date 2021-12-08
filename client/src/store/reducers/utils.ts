@@ -17,7 +17,8 @@ export const addSearchedUsersToStore = (state: any, users: any) => {
 }
 
 export const addMessageToStore = (state: any, payload: any) => {
-    const { conversationId, message } = payload;
+    const { conversationId, message, isSender } = payload;
+
     return state.map((convo: any) => {
         if (convo.id === conversationId) {
             const messageIds = convo.messages.map((message: any) => message.id);
@@ -25,6 +26,15 @@ export const addMessageToStore = (state: any, payload: any) => {
                 const convoCopy = {...convo}
                 convoCopy.messages.push(message);
                 convoCopy.latestMessageText = message.text;
+                
+                if(isSender) {
+                    convoCopy.latestReadMessage = latestReadMessage(convoCopy.messages, message.senderId)
+                } 
+                
+                if(!isSender) {
+                    convoCopy.unreadCount = unreadCount(convoCopy.messages, message.recipientId);
+                }
+
                 return convoCopy
             }
             return convo;
@@ -71,6 +81,62 @@ export const addConversationToStore = (state: any, payload: any) => {
                 return convo;
             }
         })
+    }
+}
+
+export const updateConversationInStore = (state: any, payload: any) => {
+    const { conversationId, otherUser, userId } = payload;
+
+    return state.map((convo: any) => {
+        if (convo.id === conversationId) {
+            const convoCopy = {...convo};
+            convoCopy.messages.map((message: any) => {
+                if (message.senderId === otherUser.id) {
+                    message.read = true;
+                }
+
+                return message;
+            });
+
+            if (otherUser.id !== userId) {
+                convoCopy.unreadCount = unreadCount(convoCopy.messages, userId);
+            } 
+
+            if (otherUser.id === userId) {
+                convoCopy.latestReadMessage = latestReadMessage(convoCopy.messages, otherUser.id);
+            }
+
+            return convoCopy
+        }
+        return convo;
+    })
+}
+
+const unreadCount = (messages: any, userId: number) => {
+    const messagesCopy = [...messages];
+    messagesCopy.reverse();
+
+    let unread = 0;
+    console.log(messagesCopy);
+    for (let message of messagesCopy) {
+        if (!message.read && message.senderId !== userId) {
+            unread += 1
+        } else {
+            break;
+        }
+    }
+
+    return unread;
+}
+
+const latestReadMessage = (messages: any, userId: number) => {
+    const userMessages = messages.filter((message: any) => message.senderId === userId);
+    userMessages.reverse();
+
+    for (let message of userMessages) {
+        if (message.read) {
+            return message.id
+        }
     }
 }
 

@@ -1,125 +1,88 @@
-import { useState, ComponentProps } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { register } from "../../store/thunks";
-import { connect } from "react-redux";
-import { ReduxState } from "../../store";
+import { ComponentProps } from "react";
 import { 
     Box, 
     Grid, 
-    Typography, 
     Button, 
-    FormControl, 
-    TextField, 
-    FormHelperText 
+    Hidden
 } from "@mui/material";
+import { makeStyles } from '@mui/styles';
+import { SignupForm } from './index';
+import Image from './bg-img.png';
+
+const useStyles = makeStyles((theme: any) => ({
+    root: {
+        height: '100vh',
+        width: '100vw',
+    },
+    left: {
+        backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(0,0,255,0.5)), url(${Image})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+    },
+    banner: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        flexGrow: 1
+    },
+    form: {
+        width: '70%',
+        alignItems: 'center',
+        display: 'flex',
+        flexGrow: 2
+    },
+    footer: {
+        flexGrow: 1
+    },
+    bannerText: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0 1rem 0 3rem',
+    },
+    bannerButton: {
+        display: 'flex',
+        alignSelf: 'center',
+        justifyContent: 'center'
+    },
+}));
 
 const Signup = (props: ComponentProps<any>) => {
-    const { user, register } = props;
-    const navigate = useNavigate();
-
-    const [formErrorMessage, setFormErrorMessage] = useState({})
-    const handleRegister = async (ev: any) => {
-        ev.preventDefault();
-        const username = ev.target.username.value;
-        const email = ev.target.email.value;
-        const password = ev.target.password.value;
-        const confirmPassword = ev.target.confirmPassword.value;
-
-        if (password !== confirmPassword) {
-            setFormErrorMessage({ confirmPassword: "Passwords must match!"})
-            return;
-        }
-
-        await register({ username, email, password });
-    }
-
-    if (user?.id) {
-        return <Navigate replace to="/home" />;
-    }
+    const classes = useStyles();
+    const { navigateToLogin, handleRegister, formErrorMessage } = props;
 
     return (
-        <Grid container>
-            <Box>
-                <Grid container item>
-                    <Typography>Need to log in?</Typography>
-                    <Button onClick={() => navigate("/login")}> Login </Button>
+        <Grid container className={classes.root}>
+            <Hidden mdDown>
+                <Grid container item xs={0} md={4} className={classes.left} />
+            </Hidden>
+            <Grid 
+                container 
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                item 
+                xs={12} md={8} >
+                <Grid container className={classes.banner}>
+                    <Grid item xs={6} md={4} className={classes.bannerText}>Already have an account?</Grid>
+                    <Grid item xs={6} md={4} className={classes.bannerButton}>
+                        <Button 
+                            onClick={navigateToLogin} 
+                            variant="outlined" 
+                            size="medium"
+                        > Login
+                        </Button> 
+                    </Grid>
                 </Grid>
-            </Box>
-            <form onSubmit={handleRegister}>
-                <Grid>
-                    <Grid>
-                        <FormControl>
-                            <TextField
-                                aria-label="username"
-                                label="username"
-                                name="username"
-                                type="text"
-                                required
-                            />
-                        </FormControl>
-                    </Grid>
-                    <Grid>
-                        <FormControl>
-                            <TextField
-                                aria-label="email address"
-                                label="email address"
-                                name="email"
-                                type="email"
-                                required
-                            />
-                        </FormControl>
-                    </Grid>
-                    <Grid>
-                        <FormControl error={!!(formErrorMessage as any).confirmPassword}>
-                            <TextField
-                                aria-label="password"
-                                label="password"
-                                name="password"
-                                inputProps={{minLength: 6}}
-                                type="password"
-                                required
-                            />
-                            <FormHelperText>
-                                {(formErrorMessage as any).confirmPassword}
-                            </FormHelperText>
-                        </FormControl>
-                    </Grid>
-                    <Grid>
-                        <FormControl error={!!(formErrorMessage as any).confirmPassword}>
-                            <TextField
-                                aria-label="confirm password"
-                                label="Confirm Password"
-                                name="confirmPassword"
-                                inputProps={{minLength: 6}}
-                                type="password"
-                                required
-                            />
-                            <FormHelperText>
-                                {(formErrorMessage as any).confirmPassword}
-                            </FormHelperText>
-                        </FormControl>
-                    </Grid>
-                    <Button type="submit" variant="contained" size="large" >
-                        Create
-                    </Button> 
+                <Grid className={classes.form}>
+                    <SignupForm 
+                        handleRegister={handleRegister} 
+                        formErrorMessage={formErrorMessage}
+                    />
                 </Grid>
-            </form>
+                <Box className={classes.footer} />
+            </Grid>
         </Grid>
     )
 }
 
-const mapStateToProps = (state: ReduxState) => {
-    return {
-        user: state.user
-    }
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        register: (credentials: any) => {
-            dispatch(register(credentials));
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default Signup;

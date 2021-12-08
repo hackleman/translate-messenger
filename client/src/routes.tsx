@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes } from "react-router-dom";
 import { Home } from './components';
-import { Login, Signup, SnackbarError } from './components/Authentication';
+import { LoginContainer, SignupContainer, SnackbarError } from './components/Authentication';
 import { connect } from "react-redux";
 import { ReduxState } from "./store";
 
@@ -32,11 +32,11 @@ const AppRouter = (props: any) => {
             )}
             <Routes>
                 <Route path="/home" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Signup/>} />
+                <Route path="/login" element={<LoginContainer />} />
+                <Route path="/register" element={<SignupContainer/>} />
                 {user?.id ?
                     <Route path="/" element={<Home />} /> :
-                    <Route path="/" element={<Signup />} />
+                    <Route path="/" element={<SignupContainer />} />
                 }
             </Routes>
         </>

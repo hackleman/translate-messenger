@@ -1,5 +1,6 @@
 import { getConnection } from 'typeorm';
 import { User, Message, Conversation } from '../db/entity';
+const activeUsers = require('../activeUsers');
 
 export const postMessage = async (user: User, body: any): Promise<any> => {
     const MessageRepo = getConnection().getRepository(Message);
@@ -11,12 +12,18 @@ export const postMessage = async (user: User, body: any): Promise<any> => {
 
     const conversation = await Conversation.findConversation(senderId, recipientId);
     if (conversation) {
+        let read = false;
+
+        if (activeUsers.hasOwnProperty(recipientId)) {
+            read = activeUsers[recipientId].includes(user.id)
+        }
+
         const message = MessageRepo.create({
             senderId,
             recipientId,
             text,
             conversation,
-            read: false
+            read
         });
 
         await MessageRepo.save(message);

@@ -13,8 +13,22 @@ const getUserConversations = async (req: any, res: Response) => {
     }
 }
 
+const updateUserConversations = async (req: any, res: any) => {
+    try {
+        const { user, body } = req;
+        await convoController.updateUserConversations(body.conversationId, user.id);
+        return res.status(204).json({
+            msg: "success"
+        });
+    } catch (error) {
+        return res.status(402).json({
+            msg: "Error updating TABLE CONVERSATIONS"
+        })
+    }
+}
 const router = Router();
 
 router.get('/', getUserConversations);
+router.put('/', updateUserConversations);
 
 export default router;

@@ -8,26 +8,23 @@ import { clearState, ReduxState } from "../../store";
 const useStyles = makeStyles(() => ({
     root: {
       height: 44,
-      marginTop: 23,
-      marginLeft: 6,
+      padding: '3rem 1rem 3rem 0',
+      borderRadius: 10,
       display: "flex",
-      alignItems: "center"
-    },
-    subContainer: {
-      display: "flex",
-      justifyContent: "space-between",
       alignItems: "center",
+      transition: '0.5s'
+    },
+    avatar: {
+      paddingLeft: '1rem',
       flexGrow: 1
     },
     username: {
       letterSpacing: -0.23,
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: "bold",
-      marginLeft: 17
     },
     ellipsis: {
       color: "#95A7C4",
-      marginRight: 24,
       opacity: 0.5
     }
   }));
@@ -42,15 +39,15 @@ const CurrentUser = (props: any) => {
     }
 
     return (
-            <Box className={classes.root}>
+          <Box className={classes.root}>
             <BadgeAvatar photoUrl={user.photoUrl} online={true} />
-            <Box className={classes.subContainer}>
-                <Typography className={classes.username}>{user.username}</Typography>
+            <Box className={classes.avatar}>
+                <Typography sx={{fontSize: 20}}>{user.username}</Typography>
             </Box>
-            <Button onClick={handleLogout}>
+            <Button variant="outlined" onClick={handleLogout}>
                 Logout
             </Button>
-            </Box>
+          </Box>
         );
 };
 

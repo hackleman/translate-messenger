@@ -9,6 +9,7 @@ const { init } = require('../app');
 const { startDatabase, seedDatabase, resetDatabase } = require('../db');
 const { User, Conversation, Message } = require('../db/entity');
 const onlineUsers = require('../onlineUsers');
+const activeUsers = require('../activeUsers');
 
 const app = express()
 /**
@@ -66,6 +67,13 @@ io.on("connection", (socket) => {
 
     socket.on("new-conversation", (data) => {
       socket.broadcast.emit("new-conversation", data);
+    })
+
+    socket.on("update-conversation", (data) => {
+      const { userId, otherUser} = data;
+
+      activeUsers[userId] = [otherUser.id];
+      socket.broadcast.emit("update-conversation", data);
     })
 
     socket.on("logout", (id) => {

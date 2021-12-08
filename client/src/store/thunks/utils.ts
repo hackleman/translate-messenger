@@ -31,6 +31,23 @@ export const getConversationsFromDB = async () => {
     return data;
 }
 
+export const updateConversationInDB = async (body: any) => {
+    const { username, conversationId } = body;
+    const token = localStorage.getItem("messenger-token") || "";
+    
+    await fetch("/api/conversations", {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token
+        },
+        body: JSON.stringify({
+            username,
+            conversationId
+        })
+    });
+}
+
 export const getCurrentUserFromDB = async () => {
     const token = localStorage.getItem("messenger-token") || "";
 

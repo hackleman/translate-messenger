@@ -39,6 +39,7 @@ export default class Conversation {
     public otherUser?: UserResponse;
     public latestMessageText?: string;
     public unreadCount?: number;
+    public latestReadMessage?: number;
 }
 
 Conversation.findConversation = async (user1Id: number, user2Id: number): Promise<Conversation | undefined> => {

@@ -3,14 +3,14 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
     profilePic: {
-        height: 44,
-        width: 44,
+        height: 55,
+        width: 55,
         background: 'red'
       },
       badge: {
-        height: 13,
+        height: '13px!important',
         width: 13,
-        borderRadius: "50%",
+        borderRadius: "50%!important",
         border: "2px solid white",
         backgroundColor: "#D0DAE9"
       },

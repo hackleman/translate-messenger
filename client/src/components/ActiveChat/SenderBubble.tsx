@@ -1,7 +1,7 @@
 import { makeStyles } from "@mui/styles";
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Theme, Typography } from "@mui/material";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       display: "flex",
       flexDirection: "column",
@@ -23,18 +23,26 @@ const useStyles = makeStyles(() => ({
     bubble: {
       background: "#F4F6FA",
       borderRadius: "10px 10px 0 10px"
+    },
+    avatar: {
+
     }
   }));
 
 const SenderBubble = (props: any) => {
     const classes = useStyles();
-    const { time, text } = props;
+    const { time, text, latestRead, photoUrl } = props;
+    const photourl = photoUrl || "";
+    
     return (
       <Box className={classes.root}>
         <Typography className={classes.date}>{time}</Typography>
         <Box className={classes.bubble}>
           <Typography className={classes.text}>{text}</Typography>
         </Box>
+        {
+          latestRead && <Avatar className={classes.avatar} src={photourl} sx={{width:16, height:16}} />
+        }
       </Box>
     );
   };

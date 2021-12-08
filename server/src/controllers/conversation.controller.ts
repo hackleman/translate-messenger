@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { Conversation, User } from '../db/entity';
+import { Conversation, User, Message } from '../db/entity';
 
 const onlineUsers = require('../onlineUsers');
 
@@ -32,29 +32,53 @@ export const getUserConversations = async (user: User): Promise<Conversation[]> 
         delete convo.users;
 
         const messages = [...convo.messages];
+        messages.reverse();
 
         if (messages.length > 0) {
-            convo.latestMessageText = messages[messages.length - 1].text;
+            convo.latestMessageText = messages[0].text;
             
-            messages.reverse();
-            const lastSentIndex = messages.findIndex((message) => message.senderId === user.id);
+            let unread = 0;
+            let latestReadMessage = -1;
 
-            if (lastSentIndex === 0) {
-                convo.unreadCount = 0
-            } else {
-                let unread = 0;
-
-                for (let message of messages) {
-                    if (!message.read && message.senderId !== user.id) {
-                        unread += 1;
-                    } else {
-                        break;
-                    }
+            for (let message of messages) {
+                if (!message.read && message.senderId !== user.id) {
+                    unread += 1;
+                } else {
+                    break;
                 }
-                convo.unreadCount = unread;
             }
+
+            for (let message of messages) {
+                if(message.senderId === user.id && message.read) {
+                    latestReadMessage = message.id;
+                    break;
+                }
+            }
+
+            convo.unreadCount = unread;
+            convo.latestReadMessage = latestReadMessage;
         }
     })
 
     return convos;
+}
+
+export const updateUserConversations = async (conversationId: number, userId: number): Promise<void> => {
+    const ConvoRepo = getRepository(Conversation);
+    const MessageRepo = getRepository(Message);
+
+    const convo = await ConvoRepo.findOne({
+        where: {id: conversationId}
+    })
+    
+    if (convo) {
+        convo.messages.forEach((message: Message) => {
+            if(message.senderId !== userId) {
+                message.read = true;
+            }
+            convo.unreadCount = 0;
+            MessageRepo.save(message);
+        })
+        ConvoRepo.save(convo)
+    }
 }
