@@ -117,7 +117,6 @@ const unreadCount = (messages: any, userId: number) => {
     messagesCopy.reverse();
 
     let unread = 0;
-    console.log(messagesCopy);
     for (let message of messagesCopy) {
         if (!message.read && message.senderId !== userId) {
             unread += 1

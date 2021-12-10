@@ -1,7 +1,11 @@
+const BASE_URL = 'https://translate-messaging-server.herokuapp.com'
+
 export const postMessageToDB = async (body: any) => {
     const token = localStorage.getItem("messenger-token") || "";
     
-    const res = await fetch("/api/messages", {
+    const URL = BASE_URL + "/api/messages";
+
+    const res = await fetch(URL, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -17,8 +21,9 @@ export const postMessageToDB = async (body: any) => {
 
 export const getConversationsFromDB = async () => {
     const token = localStorage.getItem("messenger-token") || "";
-        
-    const result = await fetch("/api/conversations", {
+    const URL = BASE_URL + "/api/conversations";
+
+    const result = await fetch(URL, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
@@ -34,8 +39,9 @@ export const getConversationsFromDB = async () => {
 export const updateConversationInDB = async (body: any) => {
     const { username, conversationId } = body;
     const token = localStorage.getItem("messenger-token") || "";
-    
-    await fetch("/api/conversations", {
+    const URL = BASE_URL + "/api/conversations";
+
+    await fetch(URL, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json",
@@ -50,8 +56,9 @@ export const updateConversationInDB = async (body: any) => {
 
 export const getCurrentUserFromDB = async () => {
     const token = localStorage.getItem("messenger-token") || "";
+    const URL = BASE_URL + "/api/users";
 
-    const res = await fetch("/api/users", {
+    const res = await fetch(URL, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
@@ -65,11 +72,12 @@ export const getCurrentUserFromDB = async () => {
 
 export const getSearchedUsersFromDB = async (rawSearchTerm: string) => {
     const token = localStorage.getItem("messenger-token") || "";
-
     const searchTerm = rawSearchTerm.replace(/[^a-z]/gi, '');
 
+    const URL = BASE_URL + `/api/users/${searchTerm}`;
+
     if (searchTerm.length > 0) {
-        const result = await fetch(`/api/users/${searchTerm}`, {
+        const result = await fetch(URL, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -82,7 +90,9 @@ export const getSearchedUsersFromDB = async (rawSearchTerm: string) => {
 }
 
 export const postRegistrationToDB = async (credentials: any) => {
-    const res = await fetch("auth/register", {
+    const URL = BASE_URL + "/auth/register";
+
+    const res = await fetch(URL, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -97,7 +107,9 @@ export const postRegistrationToDB = async (credentials: any) => {
 }
 
 export const postLoginToDB = async (credentials: any) => {
-    const res = await fetch("auth/login", {
+    const URL = BASE_URL + "/auth/login";
+
+    const res = await fetch(URL, {
         method: "POST",
         mode: "cors",
         headers: {
@@ -113,7 +125,9 @@ export const postLoginToDB = async (credentials: any) => {
 }
 
 export const postLogoutToDB = async () => {
-    await fetch("/auth/logout", {
+    const URL  = BASE_URL + "/auth/logout";
+
+    await fetch(URL, {
         method: "DELETE",
         mode: "cors",
         headers: {

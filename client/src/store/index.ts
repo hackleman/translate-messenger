@@ -1,5 +1,4 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
-import loggerMiddleware from 'redux-logger';
 import thunkMiddleware from "redux-thunk";
 import { user, conversations, active } from './reducers';
 
@@ -25,7 +24,7 @@ const rootReducer = (state: any, action: any) => {
 
 export const store = createStore(
     rootReducer,
-    applyMiddleware(loggerMiddleware, thunkMiddleware));
+    applyMiddleware(thunkMiddleware));
 
 export type ReduxState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

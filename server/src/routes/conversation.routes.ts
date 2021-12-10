@@ -8,7 +8,8 @@ const getUserConversations = async (req: any, res: Response) => {
 
     } catch (error) {
         return res.status(402).json({
-            msg: "Error fetching users convos"
+            msg: "Error fetching users convos",
+            error
         })
     }
 }

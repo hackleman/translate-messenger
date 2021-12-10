@@ -3,7 +3,7 @@ import * as entities from './entity';
 
 export const startDatabase = (): Promise<Connection> => {
     return createConnection({
-        type: 'postgres',
+        type: 'mysql',
         host: process.env.DB_HOST,
         port: Number(process.env.DB_PORT),
         username: process.env.DB_USERNAME,

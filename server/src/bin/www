@@ -24,7 +24,7 @@ init(app);
 startDatabase()
   .then(async (conn) => {
     console.log(process.env.NODE_ENV)
-    if (process.env.NODE_ENV == 'test') {
+    if (process.env.NODE_ENV == 'development') {
       await resetDatabase();
       await seedDatabase();
     };

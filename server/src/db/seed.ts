@@ -9,6 +9,8 @@ export const resetDatabase = async(): Promise<void> => {
 
 export const seedDatabase = async (): Promise<void> => {
 
+    console.log('seeding...');
+    
     const UserRepo = getConnection().getRepository(User);
     const ConvoRepo = getConnection().getRepository(Conversation);
     const MessageRepo = getConnection().getRepository(Message);
