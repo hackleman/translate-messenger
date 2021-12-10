@@ -30,6 +30,7 @@
       "react-app"
     ]
   },
+  "proxy": "https://translate-messaging-server.herokuapp.com",
   "browserslist": {
     "production": [
       ">0.2%",
