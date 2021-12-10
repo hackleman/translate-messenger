@@ -8,7 +8,7 @@ import {
     updateConversation
  } from "./store/reducers/conversations"
 
-const socket = io(window.location.origin);
+const socket = io();
 
 socket.on("connect", () => {
     console.log("connected to server");
