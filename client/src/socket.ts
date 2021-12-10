@@ -8,7 +8,7 @@ import {
     updateConversation
  } from "./store/reducers/conversations"
 
-const socket = io();
+const socket = io("https://translate-messaging-server.herokuapp.com");
 
 socket.on("connect", () => {
     console.log("connected to server");
